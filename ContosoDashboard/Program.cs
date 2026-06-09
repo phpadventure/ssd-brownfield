@@ -44,6 +44,11 @@ builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 
+// Document management services (storage, scanner, document service)
+builder.Services.AddScoped<ContosoDashboard.Services.Storage.IFileStorageService, ContosoDashboard.Services.Storage.LocalFileStorageService>();
+builder.Services.AddScoped<ContosoDashboard.Services.Storage.IFileScanner, ContosoDashboard.Services.Storage.NoOpFileScanner>();
+builder.Services.AddScoped<ContosoDashboard.Services.IDocumentService, ContosoDashboard.Services.DocumentService>();
+
 // Add HttpContextAccessor for accessing user claims
 builder.Services.AddHttpContextAccessor();
 
@@ -57,6 +62,11 @@ using (var scope = app.Services.CreateScope())
     {
         var context = services.GetRequiredService<ApplicationDbContext>();
         context.Database.EnsureCreated(); // For development - use migrations in production
+        // Ensure uploads directory exists when using LocalFileStorageService
+        var config = services.GetRequiredService<IConfiguration>();
+        var basePath = config["FileStorage:BasePath"] ?? Path.Combine("AppData","uploads");
+        if (!Path.IsPathRooted(basePath)) basePath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), basePath));
+        System.IO.Directory.CreateDirectory(basePath);
     }
     catch (Exception ex)
     {

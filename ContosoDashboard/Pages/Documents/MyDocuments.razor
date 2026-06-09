@@ -1,0 +1,18 @@
+@page "/documents"
+@inject HttpClient Http
+
+<h3>My Documents</h3>
+
+@code {
+    private object[] items = Array.Empty<object>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var resp = await Http.GetAsync("/api/documents");
+        if (resp.IsSuccessStatusCode)
+        {
+            var json = await resp.Content.ReadAsStringAsync();
+            // keep simple for MVP
+        }
+    }
+}

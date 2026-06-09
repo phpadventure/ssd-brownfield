@@ -1,0 +1,37 @@
+@page "/documents/upload"
+@inject HttpClient Http
+
+<h3>Upload Document</h3>
+
+<input type="text" @bind="Title" placeholder="Title" />
+<input type="text" @bind="Category" placeholder="Category" />
+<InputFile OnChange="HandleFileSelected" />
+<button @onclick="Upload">Upload</button>
+
+@code {
+    private IBrowserFile? SelectedFile;
+    private string Title = "";
+    private string Category = "Project Documents";
+
+    private void HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        SelectedFile = e.File;
+    }
+
+    private async Task Upload()
+    {
+        if (SelectedFile == null) return;
+        var content = new MultipartFormDataContent();
+        var stream = SelectedFile.OpenReadStream(25 * 1024 * 1024);
+        content.Add(new StreamContent(stream), "file", SelectedFile.Name);
+        content.Add(new StringContent(Title), "title");
+        content.Add(new StringContent(Category), "category");
+
+        var resp = await Http.PostAsync("/api/documents/upload", content);
+        if (resp.IsSuccessStatusCode)
+        {
+            // simple success flow
+            await Task.Yield();
+        }
+    }
+}

@@ -1,50 +1,70 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+SYNC IMPACT REPORT
+Version change: TODO(unknown) -> 1.0.0
+Modified principles: Added concrete principles for training, offline-first, security, testing, observability/versioning
+Added sections: Additional Constraints, Development Workflow
+Removed sections: None
+Templates requiring updates: .specify/templates/* -> ⚠ pending (no templates found in repository)
+Follow-up TODOs: RATIFICATION_DATE (unknown) — TODO(RATIFICATION_DATE): confirm original adoption date
+-->
+
+# ContosoDashboard Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### 1. Training-Centric Documentation (MUST)
+All code, examples, and exercises MUST be written for clarity and reproducibility in a training context. Documentation
+MUST clearly indicate which parts are mock implementations and which are production-grade guidance. Rationale: the
+repository is used for Spec-Driven Development training and must prioritize teachability and predictable outcomes.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### 2. Offline-First & Reproducible (MUST)
+The project MUST run in an offline, local environment without external cloud dependencies. Infrastructure abstractions
+MUST be used so that production replacements (Azure SQL, Blob Storage, Entra ID) can be swapped without changing
+business logic. Rationale: training environments must be reliable and simple to set up.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### 3. Security-Informed Training (MUST)
+Security controls included for training (mock authentication, role-based examples) MUST be clearly labeled as training
+implementations. Any changes to authentication, authorization, or data access MUST include a section describing how to
+harden for production (password hashing, MFA, audit logging). Rationale: prevent accidental promotion of mock code
+to production.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### 4. Test-First & Verifiable (SHOULD / MUST for critical flows)
+Tests SHOULD be written alongside new features. Critical flows (authentication, authorization, data migrations, core
+business logic) MUST have automated tests. Rationale: ensure examples remain verifiable and reproducible across training
+runs.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### 5. Simplicity, Observability & Semantic Versioning (MUST)
+Keep examples simple and focused. Instrument services with structured logging and clear diagnostics to aid learning and
+debugging. Versioning MUST follow semantic versioning for released artifacts and project-level governance. Rationale:
+learners must be able to reason about changes and track breaking changes.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Additional Constraints
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+Technology constraints for this repository are intentionally prescriptive for training reproducibility:
+- Framework: ASP.NET Core 8 (Blazor Server)
+- Database: SQL Server LocalDB for local development
+- Authentication: Mock cookie-based authentication for training only
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+All infrastructure integrations MUST be abstracted behind interfaces to enable swap-in of production implementations.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+## Development Workflow
+
+- All work MUST be done on feature branches and merged via pull requests.
+- Pull requests MUST include a summary of changes, link to related spec/task, and a testing checklist.
+- Code reviews MUST verify adherence to the Principles above, including tests for critical flows, clear documentation of
+	mock vs. production code, and observability hooks.
+- Automated CI SHOULD run tests and basic static analysis before merging.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+The constitution defines core non-negotiable expectations for this training repository. Amendments MUST be recorded with
+rationale, author, and migration steps when they affect developer workflows or student-facing examples. Minor wording
+clarifications are allowed as patch updates; additions or redefinitions of principles require a minor or major version bump
+depending on impact.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+Amendment rules:
+- Patch: Non-semantic clarifications, typo fixes.
+- Minor: Additive principles or procedural updates that do not break existing guidance.
+- Major: Removal or redefinition of principles that change governance expectations.
+
+**Version**: 1.0.0 | **Ratified**: TODO(RATIFICATION_DATE): confirm original adoption date | **Last Amended**: 2026-06-09
